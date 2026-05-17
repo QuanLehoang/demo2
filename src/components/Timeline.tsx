@@ -6,7 +6,7 @@ const milestones = [
   {
     year: '1890',
     title: 'Năm sinh',
-    desc: 'Ngày 19/05/1890, Bác sinh ra tại làng Chùa, quê ngoại ở làng Sen, Nam Đàn, Nghệ An.',
+    desc: 'Ngày 19/05/1890, Bác sinh ra tại làng Hoàng Trù, quê nội ở làng Sen, Nam Đàn, Nghệ An.',
     icon: <Calendar className="w-6 h-6" />,
   },
   {
@@ -24,7 +24,7 @@ const milestones = [
   {
     year: '1945',
     title: 'Tuyên ngôn Độc lập',
-    desc: 'Ngày 02/09/1945, tại Quảng trường Ba Đình, Bác đọc bản Tuyên ngôn Độc lập, khai sinh nước VNDCCH.',
+    desc: 'Ngày 02/09/1945, tại Quảng trường Ba Đình, Bác đọc bản Tuyên ngôn Độc lập, khai sinh nước Việt Nam Dân chủ Cộng hòa.',
     icon: <Flag className="w-6 h-6" />,
   },
   {
@@ -39,7 +39,7 @@ const Timeline: React.FC = () => {
   return (
     <section id="timeline" className="py-24 px-6 bg-[#0a0a0a]">
       <div className="max-w-6xl mx-auto">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -62,7 +62,7 @@ const Timeline: React.FC = () => {
             >
               {/* Dot/Icon */}
               <div className="absolute left-[-13px] top-0 md:left-1/2 md:-translate-x-1/2 md:top-8 w-6 h-6 rounded-full bg-vn-red border-4 border-[#0a0a0a] z-10 group-hover:scale-125 transition-transform duration-300 shadow-[0_0_15px_rgba(218,37,29,0.5)]" />
-              
+
               <div className="md:text-center">
                 <span className="inline-block px-3 py-1 bg-vn-gold/10 text-vn-gold font-vietnam font-bold text-lg rounded-md mb-2">
                   {item.year}

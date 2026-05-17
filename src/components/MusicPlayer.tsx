@@ -70,10 +70,13 @@ function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPlaylist, setShowPlaylist] = useState(false);
+  // Thêm biến trạng thái để biết người dùng đã chủ động tương tác bật/tắt/chọn nhạc chưa
+  const [userInteracted, setUserInteracted] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const currentTrack = playlist[currentIndex];
 
+  // Logic 1: Đồng bộ trạng thái chơi nhạc khi thay đổi nút bấm hoặc đổi bài
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -84,19 +87,57 @@ function MusicPlayer() {
     }
   }, [currentIndex, isPlaying]);
 
+  // Logic 2: Tự động phát nhạc khi phát hiện tương tác đầu tiên của người dùng trên trang web
+  useEffect(() => {
+    // Nếu người dùng đã chủ động bấm nút điều khiển trên trình phát nhạc, tắt hẳn cơ chế autoplay này
+    if (userInteracted) return;
+
+    const tuDongPhatNhac = () => {
+      if (audioRef.current && !isPlaying && !userInteracted) {
+        audioRef.current.play()
+          .then(() => {
+            setIsPlaying(true);
+            setUserInteracted(true); // Đánh dấu đã tương tác thành công
+            goBoSuKien();
+          })
+          .catch((loi) => {
+            console.log("Trình duyệt chặn autoplay, chờ tương tác rõ ràng hơn:", loi);
+          });
+      }
+    };
+
+    const goBoSuKien = () => {
+      window.removeEventListener('click', tuDongPhatNhac);
+      window.removeEventListener('scroll', tuDongPhatNhac);
+      window.removeEventListener('touchstart', tuDongPhatNhac);
+      window.removeEventListener('keydown', tuDongPhatNhac);
+    };
+
+    window.addEventListener('click', tuDongPhatNhac);
+    window.addEventListener('scroll', tuDongPhatNhac);
+    window.addEventListener('touchstart', tuDongPhatNhac);
+    window.addEventListener('keydown', tuDongPhatNhac);
+
+    return () => goBoSuKien();
+  }, [isPlaying, userInteracted]);
+
   const togglePlay = () => {
+    setUserInteracted(true); // Đánh dấu người dùng đã chủ động can thiệp
     setIsPlaying(!isPlaying);
   };
 
   const nextTrack = () => {
+    setUserInteracted(true);
     setCurrentIndex((prev) => (prev + 1) % playlist.length);
   };
 
   const prevTrack = () => {
+    setUserInteracted(true);
     setCurrentIndex((prev) => (prev - 1 + playlist.length) % playlist.length);
   };
 
   const selectTrack = (index: number) => {
+    setUserInteracted(true);
     setCurrentIndex(index);
     setIsPlaying(true);
   };
